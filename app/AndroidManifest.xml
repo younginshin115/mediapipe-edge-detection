@@ -7,12 +7,14 @@
 
     <uses-sdk
         android:minSdkVersion="21"
-        android:targetSdkVersion="31" />
+        android:targetSdkVersion="29" />
 
     <application
         android:allowBackup="true"
         android:label="${appName}"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
             android:name="${mainActivity}"

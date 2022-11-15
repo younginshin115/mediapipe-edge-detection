@@ -502,7 +502,5 @@ load("@coral_crosstool//:configure.bzl", "cc_crosstool")
 cc_crosstool(name = "crosstool")
 
 load("//third_party:external_files.bzl", "external_files")
-external_files()
-
 android_sdk_repository(name = "androidsdk", path = "/home/adminuser/Android/Sdk")
 android_ndk_repository(name = "androidndk", api_level=21, path = "/home/adminuser/Android/Sdk/ndk-bundle/android-ndk-r21")

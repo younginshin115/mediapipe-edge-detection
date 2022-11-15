@@ -23,6 +23,11 @@ import com.google.mediapipe.glutil.EglManager;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
+    static {
+        System.loadLibrary("mediapipe_jni");
+        System.loadLibrary("opencv_java3");
+    }
+
     private SurfaceTexture previewFrameTexture;
     private SurfaceView previewDisplayView;
     private CameraXPreviewHelper cameraHelper;
@@ -37,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            applicationInfo =
-                getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            applicationInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Cannot find application info: " + e);
         }
@@ -52,19 +56,18 @@ public class MainActivity extends AppCompatActivity {
 
         // EGL Manager 초기화 후 Frame Processor 초기화
         processor = new FrameProcessor(
-          this,
-          eglManager.getNativeContext(),
-          applicationInfo.metaData.getString("binaryGraphName"),
-          applicationInfo.metaData.getString("inputVideoStreamName"),
-          applicationInfo.metaData.getString("outputVideoStreamName")
-        );
+                this,
+                eglManager.getNativeContext(),
+                applicationInfo.metaData.getString("binaryGraphName"),
+                applicationInfo.metaData.getString("inputVideoStreamName"),
+                applicationInfo.metaData.getString("outputVideoStreamName"));
 
         PermissionHelper.checkAndRequestCameraPermissions(this);
     }
 
     @Override
     public void onRequestPermissionsResult(
-        int requestCode, String[] permissions, int[] grantResults) {
+            int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -91,42 +94,42 @@ public class MainActivity extends AppCompatActivity {
         viewGroup.addView(previewDisplayView);
 
         previewDisplayView
-        .getHolder()
-        .addCallback(
-            new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-              processor.getVideoSurfaceOutput().setSurface(holder.getSurface()); // processor의 결과물을 View로 전송
-            }
+                .getHolder()
+                .addCallback(
+                        new SurfaceHolder.Callback() {
+                            @Override
+                            public void surfaceCreated(SurfaceHolder holder) {
+                                processor.getVideoSurfaceOutput().setSurface(holder.getSurface()); // processor의 결과물을
+                                                                                                   // View로 전송
+                            }
 
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                Size viewSize = new Size(width, height);
-                Size displaySize = cameraHelper.computeDisplaySizeFromViewSize(viewSize);
+                            @Override
+                            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                                Size viewSize = new Size(width, height);
+                                Size displaySize = cameraHelper.computeDisplaySizeFromViewSize(viewSize);
 
-                converter.setSurfaceTextureAndAttachToGLContext(
-                    previewFrameTexture, displaySize.getWidth(), displaySize.getHeight());
-            }
+                                converter.setSurfaceTextureAndAttachToGLContext(
+                                        previewFrameTexture, displaySize.getWidth(), displaySize.getHeight());
+                            }
 
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-              processor.getVideoSurfaceOutput().setSurface(null); // surface destroy시 초기화
-            }
-            });
+                            @Override
+                            public void surfaceDestroyed(SurfaceHolder holder) {
+                                processor.getVideoSurfaceOutput().setSurface(null); // surface destroy시 초기화
+                            }
+                        });
     }
 
     public void startCamera() {
         cameraHelper = new CameraXPreviewHelper();
         cameraHelper.setOnCameraStartedListener(
-            surfaceTexture -> {
-                previewFrameTexture = surfaceTexture;
-                previewDisplayView.setVisibility(View.VISIBLE);
-        });
+                surfaceTexture -> {
+                    previewFrameTexture = surfaceTexture;
+                    previewDisplayView.setVisibility(View.VISIBLE);
+                });
 
-        CameraHelper.CameraFacing cameraFacing =
-            applicationInfo.metaData.getBoolean("cameraFacingFront", false)
+        CameraHelper.CameraFacing cameraFacing = applicationInfo.metaData.getBoolean("cameraFacingFront", false)
                 ? CameraHelper.CameraFacing.FRONT
                 : CameraHelper.CameraFacing.BACK;
-        cameraHelper.startCamera(this, cameraFacing, /*unusedSurfaceTexture=*/ null);
+        cameraHelper.startCamera(this, cameraFacing, /* unusedSurfaceTexture= */ null);
     }
 }
