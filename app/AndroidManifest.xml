@@ -7,15 +7,14 @@
 
     <uses-sdk
         android:minSdkVersion="21"
-        android:targetSdkVersion="29" />
+        android:targetSdkVersion="27" />
 
     <application
         android:allowBackup="true"
         android:label="${appName}"
         android:supportsRtl="true"
-        android:hardwareAccelerated="false"
-        android:largeHeap="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name="${mainActivity}"
             android:exported="true"
@@ -27,6 +26,9 @@
         </activity>
         <!-- 메타데이터 추가 -->
         <meta-data android:name="cameraFacingFront" android:value="${cameraFacingFront}" />
+        <meta-data android:name="binaryGraphName" android:value="${binaryGraphName}" />
+        <meta-data android:name="inputVideoStreamName" android:value="${inputVideoStreamName}" />
+        <meta-data android:name="outputVideoStreamName" android:value="${outputVideoStreamName}" />
     </application>
 
 </manifest>

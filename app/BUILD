@@ -7,13 +7,11 @@ android_library(
     deps = [
         "//third_party:androidx_constraint_layout",
         "//third_party:androidx_appcompat",
+        "//third_party:opencv",
         "//mediapipe/java/com/google/mediapipe/components:android_components",
         "//mediapipe/java/com/google/mediapipe/components:android_camerax_helper",
-        "//mediapipe/java/com/google/mediapipe/framework:android_framework",
         "//mediapipe/java/com/google/mediapipe/glutil",
-        "//third_party:opencv",
-        "@maven//:androidx_concurrent_concurrent_futures",
-        "@maven//:com_google_guava_guava",
+        "//mediapipe/java/com/google/mediapipe/framework:android_framework",
     ],
 )
 
@@ -22,8 +20,8 @@ cc_binary(
     linkshared = 1,
     linkstatic = 1,
     deps = [
-        "//mediapipe/graphs/edge_detection:mobile_calculators",
         "//mediapipe/java/com/google/mediapipe/framework/jni:mediapipe_framework_jni",
+        "//mediapipe/graphs/edge_detection:mobile_calculators",
     ],
 )
 
@@ -36,7 +34,7 @@ cc_library(
 android_binary(
     name = "edgedetection",
     assets = [
-        "//mediapipe/graphs/edge_detection:mobile_gpu.binarypb",
+        "//mediapipe/graphs/edge_detection:mobile_gpu_binary_graph",
     ],
     assets_dir = "",
     custom_package = "com.example.mediapipe.edgedetection",
@@ -46,7 +44,7 @@ android_binary(
         "appName": "MediaPipe Edge Detection",
         "mainActivity": ".MainActivity",
         "cameraFacingFront": "False",
-        "binaryGraphName": "mobile_gpu.binarypb",
+        "binaryGraphName": "mobile_gpu_binary_graph",
         "inputVideoStreamName": "input_video",
         "outputVideoStreamName": "output_video",
     },

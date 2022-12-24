@@ -25,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
     static {
         System.loadLibrary("mediapipe_jni");
-        System.loadLibrary("opencv_java3");
+        try {
+            System.loadLibrary("opencv_java3");
+        } catch (java.lang.UnsatisfiedLinkError e) {
+            System.loadLibrary("opencv_java4");
+        }
     }
 
     private SurfaceTexture previewFrameTexture;
